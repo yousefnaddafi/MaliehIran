@@ -7,6 +7,8 @@ namespace MaliehIran.Models.Enums
 {
     public enum MediaTypes
     {
-        Profile = 1
+        Profile = 1,
+        ChatMedia,
+        Group
     }
 }

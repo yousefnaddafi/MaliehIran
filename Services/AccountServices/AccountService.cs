@@ -595,13 +595,13 @@ namespace MaliehIran.Services.AccountServices
                     var confirmCode = new string(Enumerable.Repeat(_confirmationCodeSetting.Chars, _confirmationCodeSetting.CodeLength).Select(s => s[random.Next(_confirmationCodeSetting.Chars.Length)]).ToArray());
                     MimeMessage message = new MimeMessage();
 
-                    MailboxAddress from = new MailboxAddress("Herbod Crypto",
+                    MailboxAddress from = new MailboxAddress("Malieh Iran",
                     "herbodfisherbot@gmail.com");
                     message.From.Add(from);
                     MailboxAddress to = new MailboxAddress("User",
                     $"{Email}");
                     message.To.Add(to);
-                    message.Subject = "Order Status";
+                    message.Subject = "Sign";
 
                     BodyBuilder bodyBuilder = new BodyBuilder();
                     bodyBuilder.HtmlBody = $"<h1>Hello Dear Subscriber!</h1> <br/> <p>{confirmCode}</p>";
@@ -652,7 +652,7 @@ namespace MaliehIran.Services.AccountServices
             {
                 MimeMessage message = new MimeMessage();
 
-                MailboxAddress from = new MailboxAddress("Herbod Crypto",
+                MailboxAddress from = new MailboxAddress("Malieh Iran",
                 "herbodfisherbot@gmail.com");
                 message.From.Add(from);
                 MailboxAddress to = new MailboxAddress("User",

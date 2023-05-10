@@ -1,14 +1,14 @@
 ﻿using MaliehIran.Infrastructure;
 using MaliehIran.Models;
 using MaliehIran.Services.AccountServices;
-using MaliehIran.Services.CronServices;
 using MaliehIran.Services.CryptographyServices;
-using MaliehIran.Services.CoinexServices;
 using MaliehIran.Services.EmailServices;
+using MaliehIran.Services.GroupServices;
 using MaliehIran.Services.JWTServices;
-using MaliehIran.Services.KucoinServices;
 using MaliehIran.Services.MediaServices;
-using MaliehIran.Services.OrderServices;
+using MaliehIran.Services.MessageRecipientServices;
+using MaliehIran.Services.MessageServices;
+using MaliehIran.Services.UserGroupServices;
 using MaliehIran.Services.UserServices;
 using MaliehIran.Services.UserTypeServices;
 using MaliehIran.Settings;
@@ -17,7 +17,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MaliehIran.Services.CryptoAccountServices;
 
 namespace MaliehIran.Extensions
 {
@@ -34,10 +33,10 @@ namespace MaliehIran.Extensions
             services.AddScoped<IProjectEFRepository<User>, ProjectEFRepository<User>>();
             services.AddScoped<IProjectEFRepository<UserType>, ProjectEFRepository<UserType>>();
             services.AddScoped<IProjectEFRepository<Media>, ProjectEFRepository<Media>>();
-            services.AddScoped<IProjectEFRepository<Market>, ProjectEFRepository<Market>>();
-            services.AddScoped<IProjectEFRepository<Cron>, ProjectEFRepository<Cron>>();
-            services.AddScoped<IProjectEFRepository<Order>, ProjectEFRepository<Order>>();
-            services.AddScoped<IProjectEFRepository<CryptoAccount>, ProjectEFRepository<CryptoAccount>>();
+            services.AddScoped<IProjectEFRepository<Message>, ProjectEFRepository<Message>>();
+            services.AddScoped<IProjectEFRepository<MessageRecipient>, ProjectEFRepository<MessageRecipient>>();
+            services.AddScoped<IProjectEFRepository<Group>, ProjectEFRepository<Group>>();
+            services.AddScoped<IProjectEFRepository<UserGroup>, ProjectEFRepository<UserGroup>>();
             
         }
 
@@ -48,15 +47,10 @@ namespace MaliehIran.Extensions
             services.AddTransient<IUserTypeService, UserTypeService>();
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IEmailService, EmailService>();
-            services.AddTransient<ICoinexService, CoinexService>();
-            //services.AddTransient<IKucoinClientSpotApiAccount, KucoinClientSpotApiAccount>();
-            services.AddTransient<IKuCoinService, KuCoinService>();
-            //services.AddTransient<IKucoinClientSpotApi, KucoinClientSpotApi>();
-
-            services.AddTransient<IOrderService, OrderService>();
-            services.AddTransient<ICronService, CronService>();
-            services.AddTransient<ICryptoAccountService, CryptoAccountService>();
-
+            services.AddTransient<IMessageService, MessageService>();
+            services.AddTransient<IMessageRecipientService, MessageRecipientService>();
+            services.AddTransient<IGroupService, GroupService>();
+            services.AddTransient<IUserGroupService, UserGroupService>();
 
             services.AddTransient(typeof(IGenerateJwtService), typeof(GenerateJwtService));
             services.AddTransient(typeof(IConfirmationCodeSetting), typeof(ConfirmationCodeSetting));

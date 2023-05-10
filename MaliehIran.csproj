@@ -30,4 +30,10 @@
     <PackageReference Include="System.Collections" Version="4.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Media\Gallery\Group\" />
+    <Folder Include="wwwroot\Media\Gallery\ChatMedia\" />
+    <Folder Include="wwwroot\Media\Gallery\Profile\" />
+  </ItemGroup>
+
 </Project>

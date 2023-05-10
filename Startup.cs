@@ -1,7 +1,6 @@
 using MaliehIran.Extensions;
 using MaliehIran.Infrastructure;
-using MaliehIran.Services.CoinexServices;
-using MaliehIran.Services.KucoinServices;
+using MaliehIran.Services.MessageServices;
 using MaliehIran.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,27 +30,18 @@ namespace MaliehIran
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
             services.AddControllersWithViews()
                .AddNewtonsoftJson(options =>
                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
                );
-            //services.AddStackExchangeRedisCache(options => options.Configuration = this.Configuration.GetConnectionString("redisServerUrl"));
-            //services.AddStackExchangeRedisCache(options =>
-            //{
-            //    options.Configuration = "localhost:6379";
-            //});
+            
             services.AddDistributedMemoryCache();
             services.AddDbContext<ProjectDBContext>(o =>
             { o.UseSqlServer(Configuration.GetConnectionString("MaliehIran")); });
-
-
-            //services.AddTransient<ICoinexService,CoinexService>();
-            //services.AddTransient<IKucoinClientSpotApiAccount, KucoinClientSpotApiAccount>();
-            //services.AddTransient<IKuCoinService,KuCoinService>();
-            //services.AddTransient<IKucoinClientSpotApi, KucoinClientSpotApi>();
+            
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSession();
-            services.AddHostedService<Services.BackGroundServices.BackGroundService>();
             services.AddDependency();
             services.AddSettings(Configuration);
             services.AddJwtAuthentication(_jwtSetting);
@@ -131,6 +121,7 @@ namespace MaliehIran
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<MessageService>("/chatHub");
             });
         }
     }
