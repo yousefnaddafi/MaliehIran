@@ -16,22 +16,19 @@ namespace MaliehIran.Models
         public string Mobile { get; set; }
         public long Type { get; set; }
         public int Status { get; set; }
-        public long? FormalId { get; set; }
         public string Password { get; set; }
         public string UserName { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
-        public string? KucoinApiKey { get; set; }
-        public string? KucoinSecretKey { get; set; }
-        public string? KucoinPassPhrase { get; set; }
-        public string? CoinexAccessId { get; set; }
-        public string? CoinexSecretKey { get; set; }
-
+        [NotMapped]
+        public string Role { get; set; }
 
         [NotMapped]
         public string ProfileImage { get; set; }
         [NotMapped]
         public string CurrentPassword { get; set; }
+        [NotMapped]
+        public List<Shop> Shops { get; set; }
     }
     public class UserSignDTO
     {

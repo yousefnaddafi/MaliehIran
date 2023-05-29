@@ -9,6 +9,7 @@ namespace MaliehIran.Models.Enums
     {
         Profile = 1,
         ChatMedia,
-        Group
+        Group,
+        File
     }
 }

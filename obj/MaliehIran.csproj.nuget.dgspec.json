@@ -40,25 +40,9 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
-            "CryptoExchange.Net": {
-              "target": "Package",
-              "version": "[5.1.12, )"
-            },
             "Dapper": {
               "target": "Package",
               "version": "[2.0.123, )"
-            },
-            "KuCoinApi.Net": {
-              "target": "Package",
-              "version": "[0.4.3, )"
-            },
-            "KuCoinApi.NetCore": {
-              "target": "Package",
-              "version": "[1.5.7, )"
-            },
-            "Kucoin.Net": {
-              "target": "Package",
-              "version": "[4.0.12, )"
             },
             "MailKit": {
               "target": "Package",

@@ -17,8 +17,6 @@ namespace MaliehIran.Models
         [NotMapped]
         public long? RecipientGroupId { get; set; }
         [NotMapped]
-        public long? RecipientChannelId { get; set; }
-        [NotMapped]
         public FileData FileData { get; set; }
         [NotMapped]
         public string? MediaUrl { get; set; }

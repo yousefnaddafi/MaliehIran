@@ -7,6 +7,7 @@ using MaliehIran.Services.Common;
 using MaliehIran.Services.CryptographyServices;
 using MaliehIran.Services.MediaServices;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,9 @@ namespace MaliehIran.Services.UserServices
     public class UserService : IUserService
     {
         private readonly IProjectEFRepository<User> userRepository;
+        private readonly IProjectEFRepository<UserType> userTypeRepository;
         private readonly IProjectEFRepository<Media> _mediaRepository;
+        private readonly IProjectEFRepository<Shop> _shopRepository;
         private readonly IMediaService _mediaService;
         private readonly IHttpContextAccessor _accessor;
         private readonly IEncryptService _encryptService;
@@ -26,14 +29,18 @@ namespace MaliehIran.Services.UserServices
         public UserService(IProjectEFRepository<User> userRepository,
             IProjectEFRepository<Media> mediaRepository,
             IHttpContextAccessor accessor,
+            IProjectEFRepository<Shop> shopRepository,
+            IProjectEFRepository<UserType> userTypeRepository,
             IMediaService mediaService,
             IEncryptService encryptService)
         {
             this.userRepository = userRepository;
+            this.userTypeRepository = userTypeRepository;
             _mediaRepository = mediaRepository;
             _mediaService = mediaService;
             _accessor = accessor;
             _encryptService = encryptService;
+            _shopRepository = shopRepository;
         }
         public async Task<long> Create(User inputDto)
         {
@@ -109,12 +116,6 @@ namespace MaliehIran.Services.UserServices
             dbUser.Mobile = string.IsNullOrEmpty(item.Mobile) ? dbUser.Mobile : item.Mobile;
             dbUser.FamilyName = string.IsNullOrEmpty(item.FamilyName) ? dbUser.FamilyName: item.FamilyName;
             dbUser.UserName= string.IsNullOrEmpty(item.UserName) ? dbUser.UserName: item.UserName;
-            dbUser.CoinexAccessId = string.IsNullOrEmpty(item.CoinexAccessId) ? dbUser.CoinexAccessId : item.CoinexAccessId;
-            dbUser.CoinexSecretKey = string.IsNullOrEmpty(item.CoinexSecretKey) ? dbUser.CoinexSecretKey: item.CoinexSecretKey;
-            dbUser.KucoinApiKey = string.IsNullOrEmpty(item.KucoinApiKey) ? dbUser.KucoinApiKey : item.KucoinApiKey;
-            dbUser.KucoinSecretKey = string.IsNullOrEmpty(item.KucoinSecretKey) ? dbUser.KucoinSecretKey: item.KucoinSecretKey;
-            dbUser.KucoinPassPhrase = string.IsNullOrEmpty(item.KucoinPassPhrase) ? dbUser.KucoinPassPhrase: item.KucoinPassPhrase;
-            dbUser.CoinexAccessId = string.IsNullOrEmpty(item.CoinexAccessId) ? dbUser.CoinexAccessId : item.CoinexAccessId;
 
             if (!string.IsNullOrEmpty(item.Password))
             {
@@ -162,6 +163,9 @@ namespace MaliehIran.Services.UserServices
             FirstOrDefault(x => x.ObjectId == z.UserId && x.Type == MediaTypes.Profile) == null ? ""
             : "media/gallery/Profile/" + _mediaRepository.GetQuery().
             FirstOrDefault(x => x.ObjectId == z.UserId && x.Type == MediaTypes.Profile).PictureUrl);
+
+            users.ForEach(z => z.Shops = new List<Shop>());
+            users.ForEach(z => z.Shops = _shopRepository.GetQuery().Where(x => x.UserId == z.UserId).ToList());
             var obj = new
             {
                 Users = users,
@@ -220,6 +224,9 @@ namespace MaliehIran.Services.UserServices
                 dbUser.ProfileImage = "media/gallery/Profile/" + dbProfile.PictureUrl;
             }
 
+            dbUser.Role = userTypeRepository.GetQuery().FirstOrDefault(z => z.UserTypeId == dbUser.Type).Name;
+            dbUser.Shops = new List<Shop>();
+            dbUser.Shops = _shopRepository.GetQuery().Where(z => z.UserId == userId).ToList();
             dbUser.Password = null;
             return dbUser;
         }
@@ -233,7 +240,8 @@ namespace MaliehIran.Services.UserServices
             {
                 dbUser.ProfileImage = "media/gallery/Profile/" + dbProfile.PictureUrl;
             }
-
+            dbUser.Shops =new List<Shop>();
+            dbUser.Shops = _shopRepository.GetQuery().Where(z=>z.UserId == id).ToList();
             dbUser.Password = null;
             return dbUser;
         }

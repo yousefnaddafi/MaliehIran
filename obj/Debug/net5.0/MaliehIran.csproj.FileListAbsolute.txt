@@ -6,14 +6,8 @@ C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\MaliehIran.runtimeconfig.json
 C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\MaliehIran.runtimeconfig.dev.json
 C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\MaliehIran.dll
 C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\MaliehIran.pdb
-C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\CryptoExchange.Net.dll
 C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\Dapper.dll
-C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\DateTimeHelpers.dll
-C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\FileRepository.dll
 C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\Humanizer.dll
-C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\Kucoin.Net.dll
-C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\KuCoinApi.Net.dll
-C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\KuCoinApi.NetCore.dll
 C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\MailKit.dll
 C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\Microsoft.AspNetCore.JsonPatch.dll
@@ -37,7 +31,6 @@ C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\MimeKit.dll
 C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\Newtonsoft.Json.dll
 C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\Newtonsoft.Json.Bson.dll
 C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\BouncyCastle.Crypto.dll
-C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\RESTApiAccess.dll
 C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerUI.dll

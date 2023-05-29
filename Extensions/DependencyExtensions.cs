@@ -8,9 +8,12 @@ using MaliehIran.Services.JWTServices;
 using MaliehIran.Services.MediaServices;
 using MaliehIran.Services.MessageRecipientServices;
 using MaliehIran.Services.MessageServices;
+using MaliehIran.Services.ReportServices;
+using MaliehIran.Services.ShopServices;
 using MaliehIran.Services.UserGroupServices;
 using MaliehIran.Services.UserServices;
 using MaliehIran.Services.UserTypeServices;
+using MaliehIran.Services.UtilityServices;
 using MaliehIran.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -37,6 +40,9 @@ namespace MaliehIran.Extensions
             services.AddScoped<IProjectEFRepository<MessageRecipient>, ProjectEFRepository<MessageRecipient>>();
             services.AddScoped<IProjectEFRepository<Group>, ProjectEFRepository<Group>>();
             services.AddScoped<IProjectEFRepository<UserGroup>, ProjectEFRepository<UserGroup>>();
+            services.AddScoped<IProjectEFRepository<Report>, ProjectEFRepository<Report>>();
+            services.AddScoped<IProjectEFRepository<Shop>, ProjectEFRepository<Shop>>();
+            services.AddScoped<IProjectEFRepository<Utility>, ProjectEFRepository<Utility>>();
             
         }
 
@@ -51,6 +57,9 @@ namespace MaliehIran.Extensions
             services.AddTransient<IMessageRecipientService, MessageRecipientService>();
             services.AddTransient<IGroupService, GroupService>();
             services.AddTransient<IUserGroupService, UserGroupService>();
+            services.AddTransient<IShopService, ShopService>();
+            services.AddTransient<IReportService, ReportService>();
+            services.AddTransient<IUtilityService, UtilityService>();
 
             services.AddTransient(typeof(IGenerateJwtService), typeof(GenerateJwtService));
             services.AddTransient(typeof(IConfirmationCodeSetting), typeof(ConfirmationCodeSetting));

@@ -81,7 +81,6 @@ namespace MaliehIran.Services.MessageServices
                     IsDeleted = false,
                     GroupId = (inputDto.RecipientGroupId == null || inputDto.RecipientUserId == 0) ? null : inputDto.RecipientGroupId,
                     UserId = (inputDto.RecipientUserId == null || inputDto.RecipientUserId == 0) ? null : inputDto.RecipientUserId,
-                    ChannelId = (inputDto.RecipientChannelId == null || inputDto.RecipientChannelId == 0) ? null : inputDto.RecipientChannelId,
                     IsRead = false,
                     IsDelivered = false,
                     MessageId = dbMessage.MessageId,
@@ -213,7 +212,7 @@ namespace MaliehIran.Services.MessageServices
                 " group by m.UserId)) as tbl " +
                 " group by UserId) tbl1 " +
                 " join dbo.Messages m on tbl1.MessageId = m.MessageId " +
-                $" join[User].[Users] u on u.UserId = tbl1.UserId) as Result where UserName like N'%{searchCommand}%' " +
+                $" join Users u on u.UserId = tbl1.UserId) as Result where UserName like N'%{searchCommand}%' " +
                 " order By Result.CreateDate Desc ";
 
             var messages = await messageRepository.DapperSqlQuery(NEWCmd);
