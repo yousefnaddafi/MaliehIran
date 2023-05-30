@@ -78,3 +78,4 @@ C:\DEV\Projects\MaliehIran\obj\Debug\net5.0\refint\MaliehIran.dll
 C:\DEV\Projects\MaliehIran\obj\Debug\net5.0\MaliehIran.pdb
 C:\DEV\Projects\MaliehIran\obj\Debug\net5.0\MaliehIran.genruntimeconfig.cache
 C:\DEV\Projects\MaliehIran\obj\Debug\net5.0\ref\MaliehIran.dll
+C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\Swashbuckle.AspNetCore.Newtonsoft.dll

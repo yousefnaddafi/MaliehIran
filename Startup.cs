@@ -14,6 +14,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Text.Json.Serialization;
+using Swashbuckle.AspNetCore.Newtonsoft;
 
 namespace MaliehIran
 {
@@ -59,6 +61,7 @@ namespace MaliehIran
                     Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer"
                 });
+                
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement()
                 {
                     {
@@ -82,6 +85,8 @@ namespace MaliehIran
                 //var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 //c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
             });
+            services.AddSwaggerGenNewtonsoftSupport();
+            
             services.AddCors();
         }
 
@@ -92,6 +97,7 @@ namespace MaliehIran
             {
                 app.UseDeveloperExceptionPage();
             }
+            
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

@@ -1,4 +1,6 @@
 ﻿using MaliehIran.Models.Enums;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
