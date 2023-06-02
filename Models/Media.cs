@@ -27,4 +27,9 @@ namespace MaliehIran.Models
         public string Base64 { get; set; }
         public int Priority { get; set; }
     }
+    public class MediaInfo
+    {
+        public MediaTypes Type { get; set; }
+        public string FilePath { get; set; }
+    }
 }

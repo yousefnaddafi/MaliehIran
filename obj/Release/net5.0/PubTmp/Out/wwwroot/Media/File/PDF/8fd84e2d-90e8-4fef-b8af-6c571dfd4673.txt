@@ -1,0 +1,1 @@
+https://www.apesoftware.com/calibration-control/help/sql-remote-connections#:~:text=Open%20SQL%20Server%20Management%20Studio%20(SSMS)&text=Go%20to%20the%20Security%20page,is%20checked%2C%20and%20click%20OK.

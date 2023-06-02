@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using MaliehIran.Extensions;
+using System;
 
 namespace MaliehIran.Controllers
 {
@@ -16,6 +17,7 @@ namespace MaliehIran.Controllers
     {
         private readonly IReportService reportService;
         private readonly IHttpContextAccessor _accessor;
+        
         public ReportController(IReportService reportService,IHttpContextAccessor accessor)
         {
             this.reportService = reportService;
@@ -23,9 +25,20 @@ namespace MaliehIran.Controllers
         }
         [HttpPost]
         [Authorize(Roles ="Admin")]
-        public long Create(Report model)
+        public async Task<long> Create(IFormFile file,long shopId, long userId,string description,string title,ReportType type)
         {
-            return reportService.Create(model);
+            var reportModel = new Report()
+            {
+                ShopId = shopId,
+                CreateDate = DateTime.Now,
+                Description = description,
+                IsDeleted = false,
+                ReportId = 0,
+                Title = title,
+                Type = type,
+                UserId = userId,
+            };
+            return await reportService.Create(reportModel,file);
         }
         [HttpPost]
         [Authorize(Roles ="Admin")]
@@ -34,22 +47,22 @@ namespace MaliehIran.Controllers
             return await reportService.Update(model);
         }
         [HttpPost]
-        public Report Get(long id)
+        public async Task<Report> Get(long id)
         {
-            return reportService.Get(id);
+            return await reportService.Get(id);
         }
         [HttpPost]
         [Authorize(Roles ="Admin")]
-        public object GetAll(int pageNumber, int count, long? shopId, long? userId, ReportType? type, string? searchCommand)
+        public async Task<object> GetAll(int pageNumber, int count, long? shopId, long? userId, ReportType? type, string? searchCommand)
         {
-            return reportService.GetAll(pageNumber,count, shopId, userId, type, searchCommand);
+            return await reportService.GetAll(pageNumber,count, shopId, userId, type, searchCommand);
         }
         [HttpPost]
-        public object GetAllForUser(int pageNumber, int count, long? shopId, ReportType? type, string? searchCommand)
+        public async Task<object> GetAllForUser(int pageNumber, int count, long? shopId, ReportType? type, string? searchCommand)
         {
             var userId = _accessor.HttpContext.User.Identity.IsAuthenticated ?
                 _accessor.HttpContext.User.Identity.GetUserId() : 0;
-            return reportService.GetAll(pageNumber, count, shopId, userId, type, searchCommand);
+            return await reportService.GetAll(pageNumber, count, shopId, userId, type, searchCommand);
         }
         [HttpPost]
         [Authorize(Roles ="Admin")]

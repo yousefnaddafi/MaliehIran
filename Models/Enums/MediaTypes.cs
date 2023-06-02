@@ -10,6 +10,9 @@ namespace MaliehIran.Models.Enums
         Profile = 1,
         ChatMedia,
         Group,
-        File
+        Picture,
+        PDF,
+        Video,
+        Podcast
     }
 }

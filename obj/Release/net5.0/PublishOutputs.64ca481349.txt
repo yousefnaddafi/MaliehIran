@@ -1,4 +1,5 @@
 C:\DEV\Projects\MaliehIran\obj\Release\net5.0\PubTmp\Out\MaliehIran.exe
+C:\DEV\Projects\MaliehIran\obj\Release\net5.0\PubTmp\Out\wwwroot\Media\File\PDF\8fd84e2d-90e8-4fef-b8af-6c571dfd4673.txt
 C:\DEV\Projects\MaliehIran\obj\Release\net5.0\PubTmp\Out\appsettings.Development.json
 C:\DEV\Projects\MaliehIran\obj\Release\net5.0\PubTmp\Out\appsettings.json
 C:\DEV\Projects\MaliehIran\obj\Release\net5.0\PubTmp\Out\MaliehIran.dll

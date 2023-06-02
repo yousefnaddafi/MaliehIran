@@ -67,8 +67,7 @@ namespace MaliehIran.Services.UtilityServices
             }
             foreach ( var utility in dbUtilities )
             {
-                var dbShop = _shopRepository.GetQuery().FirstOrDefault(z => z.ShopId == utility.ShopId);
-                utility.ShopName = dbShop == null ? "" : dbShop.ShopName;
+                utility.ShopName = _shopRepository.GetQuery().FirstOrDefault(z=>z.ShopId == utility.ShopId)?.ShopName;
             }
             var result = new
             {

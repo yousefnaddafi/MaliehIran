@@ -44,8 +44,8 @@ namespace MaliehIran.Services.UserServices
         }
         public async Task<long> Create(User inputDto)
         {
-
-            Regex regex = new Regex(@"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$");
+            Regex regex = new Regex(@"^.{4,12}$");
+            //Regex regex = new Regex(@"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$");
             Match match = regex.Match(inputDto.Password);
             if (match.Success)
             {
@@ -122,7 +122,8 @@ namespace MaliehIran.Services.UserServices
                 var dbCurrentFromUser = _encryptService.Encrypt(item.CurrentPassword).Data;
                 if (dbCurrentFromUser == dbUser.Password)
                 {
-                    Regex regex = new Regex(@"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$");
+                    Regex regex = new Regex(@"^.{4,12}$");
+                    //Regex regex = new Regex(@"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{4,}$");
                     Match match = regex.Match(item.Password);
                     if (match.Success)
                     {

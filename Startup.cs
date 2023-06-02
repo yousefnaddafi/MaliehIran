@@ -16,6 +16,9 @@ using System.IO;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using Swashbuckle.AspNetCore.Newtonsoft;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Linq;
+using Microsoft.OpenApi.Any;
 
 namespace MaliehIran
 {
@@ -61,7 +64,8 @@ namespace MaliehIran
                     Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer"
                 });
-                
+                c.SchemaFilter<EnumSchemaFilter>();
+                //c.DescribeAllEnumsAsStrings();
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement()
                 {
                     {
@@ -85,6 +89,9 @@ namespace MaliehIran
                 //var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 //c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
             });
+            //services.AddControllersWithViews()
+            //    .AddJsonOptions(options =>
+            //    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             services.AddSwaggerGenNewtonsoftSupport();
             
             services.AddCors();
@@ -129,6 +136,22 @@ namespace MaliehIran
                 endpoints.MapControllers();
                 endpoints.MapHub<MessageService>("/chatHub");
             });
+        }
+    }
+    internal sealed class EnumSchemaFilter : ISchemaFilter
+    {
+        public void Apply(OpenApiSchema model, SchemaFilterContext context)
+        {
+            if (context.Type.IsEnum)
+            {
+                model.Enum.Clear();
+                Enum
+                   .GetNames(context.Type)
+                   .ToList()
+                   .ForEach(name => model.Enum.Add(new OpenApiString($"{name}")));
+                model.Type = "string";
+                model.Format = string.Empty;
+            }
         }
     }
 }

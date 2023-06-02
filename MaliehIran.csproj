@@ -28,6 +28,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\Media\File\Picture\" />
+    <Folder Include="wwwroot\Media\File\Video\" />
+    <Folder Include="wwwroot\Media\File\PDF\" />
+    <Folder Include="wwwroot\Media\File\Podcast\" />
     <Folder Include="wwwroot\Media\Gallery\Group\" />
     <Folder Include="wwwroot\Media\Gallery\ChatMedia\" />
     <Folder Include="wwwroot\Media\Gallery\Profile\" />
