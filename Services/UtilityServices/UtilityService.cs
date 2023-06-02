@@ -12,10 +12,12 @@ namespace MaliehIran.Services.UtilityServices
     public class UtilityService : IUtilityService
     {
         private readonly IProjectEFRepository<Utility> _utilityRepository;
+        private readonly IProjectEFRepository<Shop> _shopRepository;
         private readonly IHttpContextAccessor _accessor;
-        public UtilityService(IProjectEFRepository<Utility> utilityRepository, IHttpContextAccessor accessor)
+        public UtilityService(IProjectEFRepository<Utility> utilityRepository, IProjectEFRepository<Shop> shopRepository, IHttpContextAccessor accessor)
         {
             _utilityRepository = utilityRepository;
+            _shopRepository = shopRepository;
             _accessor = accessor;
         }
         public long Create(Utility model)
@@ -63,6 +65,11 @@ namespace MaliehIran.Services.UtilityServices
             {
                 dbUtilities = dbUtilities.OrderByDescending(z => z.CreateDate).Skip((pageNumber - 1) * count).Take(count).ToList();
             }
+            foreach ( var utility in dbUtilities )
+            {
+                var dbShop = _shopRepository.GetQuery().FirstOrDefault(z => z.ShopId == utility.ShopId);
+                utility.ShopName = dbShop == null ? "" : dbShop.ShopName;
+            }
             var result = new
             {
                 Utilities = dbUtilities,
@@ -93,6 +100,11 @@ namespace MaliehIran.Services.UtilityServices
             if (pageNumber != 0 && count != 0)
             {
                 dbUtilities = dbUtilities.OrderByDescending(z => z.CreateDate).Skip((pageNumber - 1) * count).Take(count).ToList();
+            }
+            foreach (var utility in dbUtilities)
+            {
+                var dbShop = _shopRepository.GetQuery().FirstOrDefault(z => z.ShopId == utility.ShopId);
+                utility.ShopName = dbShop == null ? "" : dbShop.ShopName;
             }
             var result = new
             {

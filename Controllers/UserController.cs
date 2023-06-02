@@ -1,6 +1,7 @@
 ﻿using MaliehIran.Models;
 using MaliehIran.Services.Common;
 using MaliehIran.Services.UserServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,6 +13,7 @@ namespace MaliehIran.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService userService;
@@ -20,6 +22,7 @@ namespace MaliehIran.Controllers
             this.userService = userService;
         }
         [HttpPost]
+        [Authorize(Roles ="Admin")]
         public async Task<long> Create(User inputDto)
         {
             return await userService.Create(inputDto);
@@ -59,7 +62,6 @@ namespace MaliehIran.Controllers
         {
             return userService.GetById();
         }
-        
 
     }
 }

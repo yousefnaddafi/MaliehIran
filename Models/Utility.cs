@@ -1,5 +1,6 @@
 ﻿using MaliehIran.Models.Enums;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MaliehIran.Models
 {
@@ -12,5 +13,7 @@ namespace MaliehIran.Models
         public UtilityType Type { get; set; }
         public UtilityStatus Status { get; set; }
         public string? Description { get; set; }
+        [NotMapped]
+        public string ShopName { get; set; }
     }
 }
