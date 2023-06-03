@@ -17,11 +17,15 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using MaliehIran.Services.SMSServices;
+using IPE.SmsIrClient.Models.Requests;
+using IPE.SmsIrClient;
 
 namespace MaliehIran.Services.AccountServices
 {
     public class AccountService : IAccountService
     {
+        private readonly ISMSService _sMsService;
         private readonly IProjectEFRepository<User> _userRepository;
 
         private readonly IProjectEFRepository<UserType> _roleRepository;
@@ -36,12 +40,12 @@ namespace MaliehIran.Services.AccountServices
         public AccountService(IEncryptService encryptService, IGenerateJwtService generateJwtService,
             IDistributedCache cache, ILogger<AccountService> logger, IDistributedCache distributedCache,
         IProjectEFRepository<UserType> roleRepository, IProjectEFRepository<User> userRepository,
-            IConfirmationCodeSetting confirmationCodeSetting, /*ISmsSenderService smsSenderService,*/ IDecryptService decryptService)
+            IConfirmationCodeSetting confirmationCodeSetting, ISMSService sMsService,IDecryptService decryptService)
         {
             _encryptService = encryptService;
             _generateJwtService = generateJwtService;
             _cache = cache;
-            //_smsSenderService = smsSenderService;
+            _sMsService = sMsService;
             _logger = logger;
             //_dateTime = dateTime;
             _roleRepository = roleRepository;
@@ -584,46 +588,135 @@ namespace MaliehIran.Services.AccountServices
         //        return new ServiceResult<object>().Ok(new { hasUser, message = "User Exists" });
         //    }
         //}
-        public async Task<IServiceResult<object>> SendConfirmationCodeToEmail(string Email)
+        public async Task<IServiceResult<object>> SendConfirmationCodeToBoth(string phoneNumber, string email)
         {
-            var hasUser = (await _userRepository.GetQuery().Where(u => u.Mobile.Equals(Email)).AnyAsync()) ? 1 : 0;
-            if (await _cache.GetAsync(Email) is null)
+            if (email == null)
             {
-                try
+                email = "";
+            }
+            var hasUser = (await _userRepository.GetQuery().Where(u => u.Mobile.Equals(phoneNumber)).AnyAsync()) ? 1 : 0;
+            if (email != "")
+            {
+                hasUser = (await _userRepository.GetQuery().Where(u => u.Email.Equals(email)).AnyAsync()) ? 1 : hasUser;
+            }
+            if (hasUser == 0)
+            {
+                bool PhoneNumberCheck = false;
+                bool EmailCheck = false;
+                if (phoneNumber == null)
+                {
+                    PhoneNumberCheck = true;
+                }
+                else
+                {
+                    if (await _cache.GetAsync(phoneNumber) is null)
+                    {
+                        PhoneNumberCheck = true;
+                    }
+                    else
+                    {
+                        PhoneNumberCheck = false;
+                    }
+                }
+
+
+                if (PhoneNumberCheck == true && await _cache.GetAsync(email) is null)
                 {
                     var random = new Random();
                     var confirmCode = new string(Enumerable.Repeat(_confirmationCodeSetting.Chars, _confirmationCodeSetting.CodeLength).Select(s => s[random.Next(_confirmationCodeSetting.Chars.Length)]).ToArray());
-                    MimeMessage message = new MimeMessage();
 
-                    MailboxAddress from = new MailboxAddress("Malieh Iran",
-                    "herbodfisherbot@gmail.com");
-                    message.From.Add(from);
-                    MailboxAddress to = new MailboxAddress("User",
-                    $"{Email}");
-                    message.To.Add(to);
-                    message.Subject = "Sign";
+                    if (phoneNumber != null && phoneNumber.Length > 5)
+                    {
+                        var bulkSendResult = await _sMsService.SendVerificationCode(phoneNumber, confirmCode);
 
-                    BodyBuilder bodyBuilder = new BodyBuilder();
-                    bodyBuilder.HtmlBody = $"<h1>Hello Dear Subscriber!</h1> <br/> <p>{confirmCode}</p>";
-                    message.Body = bodyBuilder.ToMessageBody();
+                        if (bulkSendResult.Status == 1)
+                        {
+                            byte[] bytes = Encoding.UTF8.GetBytes(confirmCode.ToCharArray());
+                            await _cache.SetAsync(phoneNumber, bytes, new DistributedCacheEntryOptions() { AbsoluteExpiration = DateTime.Now.AddMinutes(4) });
+                            //return new ServiceResult<object>().Ok(new { hasUser, message = "A Confirmation code has been sent to you" });
+                        }
+                    }
+                    if (email.Contains("@"))
+                    {
+                        MimeMessage message = new MimeMessage();
 
-                    SmtpClient client = new SmtpClient();
-                    client.Connect("smtp.gmail.com", 465, true);
-                    client.Authenticate("herbodfisherbot@gmail.com", "typaxyklzsolcihv");
+                        MailboxAddress from = new MailboxAddress("Malieh Iran",
+                        "herbodfisherbot@gmail.com");
+                        message.From.Add(from);
+                        MailboxAddress to = new MailboxAddress("User",
+                        $"{email}");
+                        message.To.Add(to);
+                        message.Subject = "Sign";
 
-                    client.Send(message);
-                    client.Disconnect(true);
-                    client.Dispose();
-                    byte[] bytes = Encoding.UTF8.GetBytes(confirmCode.ToCharArray());
-                    await _cache.SetAsync(Email, bytes, new DistributedCacheEntryOptions() { AbsoluteExpiration = DateTime.Now.AddMinutes(4) });
-                    return new ServiceResult<object>().Ok(new { hasUser, message = "A Confirmation code has been sent to your Email" });
+                        BodyBuilder bodyBuilder = new BodyBuilder();
+                        bodyBuilder.HtmlBody = $"<h1>Hello Dear Subscriber!</h1> <br/> <p>{confirmCode}</p>";
+                        message.Body = bodyBuilder.ToMessageBody();
+
+                        SmtpClient client = new SmtpClient();
+                        client.Connect("smtp.gmail.com", 465, true);
+                        client.Authenticate("herbodfisherbot@gmail.com", "typaxyklzsolcihv");
+
+                        client.Send(message);
+                        client.Disconnect(true);
+                        client.Dispose();
+                    }
+
+                    byte[] bytes1 = Encoding.UTF8.GetBytes(confirmCode.ToCharArray());
+                    await _cache.SetAsync(email, bytes1, new DistributedCacheEntryOptions() { AbsoluteExpiration = DateTime.Now.AddMinutes(4) });
+
+
+                    return new ServiceResult<object>().Ok(new { hasUser, message = "A Confirmation code has been sent to you" });
                 }
-                catch (Exception ex)
-                {
-                    return new ServiceResult<object>().Ok(new { hasUser, message = "network problem" });
-                }
+                return new ServiceResult<object>().Ok(new { hasUser, message = "Confirmation code has not expired" });
             }
-            return new ServiceResult<object>().Ok(new { hasUser, message = "Confirmation code has not expired" });
+            else
+            {
+                return new ServiceResult<object>().Ok(new { hasUser, message = "User Exists" });
+            }
+
+
+
+
+
+
+            //var hasUser = (await _userRepository.GetQuery().Where(u => u.Mobile.Equals(Email)).AnyAsync()) ? 1 : 0;
+            //if (await _cache.GetAsync(Email) is null)
+            //{
+            //    try
+            //    {
+            //        var random = new Random();
+            //        var confirmCode = new string(Enumerable.Repeat(_confirmationCodeSetting.Chars, _confirmationCodeSetting.CodeLength).Select(s => s[random.Next(_confirmationCodeSetting.Chars.Length)]).ToArray());
+            //        MimeMessage message = new MimeMessage();
+
+            //        MailboxAddress from = new MailboxAddress("Malieh Iran",
+            //        "herbodfisherbot@gmail.com");
+            //        message.From.Add(from);
+            //        MailboxAddress to = new MailboxAddress("User",
+            //        $"{Email}");
+            //        message.To.Add(to);
+            //        message.Subject = "Sign";
+
+            //        BodyBuilder bodyBuilder = new BodyBuilder();
+            //        bodyBuilder.HtmlBody = $"<h1>Hello Dear Subscriber!</h1> <br/> <p>{confirmCode}</p>";
+            //        message.Body = bodyBuilder.ToMessageBody();
+
+            //        SmtpClient client = new SmtpClient();
+            //        client.Connect("smtp.gmail.com", 465, true);
+            //        client.Authenticate("herbodfisherbot@gmail.com", "typaxyklzsolcihv");
+
+            //        client.Send(message);
+            //        client.Disconnect(true);
+            //        client.Dispose();
+            //        byte[] bytes = Encoding.UTF8.GetBytes(confirmCode.ToCharArray());
+            //        await _cache.SetAsync(Email, bytes, new DistributedCacheEntryOptions() { AbsoluteExpiration = DateTime.Now.AddMinutes(4) });
+            //        return new ServiceResult<object>().Ok(new { hasUser, message = "A Confirmation code has been sent to your Email" });
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        return new ServiceResult<object>().Ok(new { hasUser, message = "network problem" });
+            //    }
+            //}
+            //return new ServiceResult<object>().Ok(new { hasUser, message = "Confirmation code has not expired" });
         }
 
         public async Task<IServiceResult<object>> ForgotPassword(AuthTypes type, string PhoneOrEmail)
@@ -674,19 +767,7 @@ namespace MaliehIran.Services.AccountServices
             }
             if (type == AuthTypes.Mobile)
             {
-                //UltraFastSend member = new UltraFastSend()
-                //{
-                //    Mobile = Convert.ToInt64(PhoneOrEmail),
-                //    TemplateId = 63752,
-                //    ParameterArray = new List<UltraFastParameters>()
-                //    {
-                //        new UltraFastParameters()
-                //        {
-                //            Parameter = "Password" , ParameterValue = $"{PassWord}"
-                //        }
-                //    }.ToArray()
-                //};
-                //var result = await _smsSenderService.UltraFastSend(member);
+                await _sMsService.ForgotPassword(PassWord,dbUser.Mobile);
             }
 
             var Obj1 = new

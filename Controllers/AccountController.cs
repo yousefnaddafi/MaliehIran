@@ -36,9 +36,9 @@ namespace MaliehIran.Controllers
             return await accountService.GetById(userId);
         }
         [HttpPost]
-        public async Task<IServiceResult<object>> SendConfirmationCodeToEmail(string Email)
+        public async Task<IServiceResult<object>> SendConfirmationCodeToBoth(string mobile,string Email)
         {
-            return await accountService.SendConfirmationCodeToEmail(Email);
+            return await accountService.SendConfirmationCodeToBoth(mobile,Email);
         }
         [HttpPost]
         public async Task<IServiceResult<User>> UpdateUser(User user)

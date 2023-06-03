@@ -79,3 +79,7 @@ C:\DEV\Projects\MaliehIran\obj\Debug\net5.0\MaliehIran.pdb
 C:\DEV\Projects\MaliehIran\obj\Debug\net5.0\MaliehIran.genruntimeconfig.cache
 C:\DEV\Projects\MaliehIran\obj\Debug\net5.0\ref\MaliehIran.dll
 C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\Swashbuckle.AspNetCore.Newtonsoft.dll
+C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\IPE.SmsIrClient.dll
+C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\System.Net.Http.Json.dll
+C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\System.Text.Encodings.Web.dll
+C:\DEV\Projects\MaliehIran\bin\Debug\net5.0\System.Text.Json.dll

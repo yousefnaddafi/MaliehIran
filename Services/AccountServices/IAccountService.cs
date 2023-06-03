@@ -15,7 +15,7 @@ namespace MaliehIran.Services.AccountServices
         Task<IServiceResult<User>> GetById(int userId);
         Task<IServiceResult<List<User>>> GetByIds(List<int> ids);
         //Task<IServiceResult<object>> SendConfirmationCode(string phoneNumber);
-        Task<IServiceResult<object>> SendConfirmationCodeToEmail(string Email);
+        Task<IServiceResult<object>> SendConfirmationCodeToBoth(string phoneNumber, string email);
         Task<IServiceResult<SignStatus>> ValidateConfirmationCode(string phoneNumber, string code);
         //Task<IServiceResult<User>> CreateUser(User user);
         Task<IServiceResult<User>> UpdateUser(User user);

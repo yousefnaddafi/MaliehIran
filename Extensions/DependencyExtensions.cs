@@ -10,6 +10,7 @@ using MaliehIran.Services.MessageRecipientServices;
 using MaliehIran.Services.MessageServices;
 using MaliehIran.Services.ReportServices;
 using MaliehIran.Services.ShopServices;
+using MaliehIran.Services.SMSServices;
 using MaliehIran.Services.UserGroupServices;
 using MaliehIran.Services.UserServices;
 using MaliehIran.Services.UserTypeServices;
@@ -60,6 +61,7 @@ namespace MaliehIran.Extensions
             services.AddTransient<IShopService, ShopService>();
             services.AddTransient<IReportService, ReportService>();
             services.AddTransient<IUtilityService, UtilityService>();
+            services.AddTransient<ISMSService, SMSService>();
 
             services.AddTransient(typeof(IGenerateJwtService), typeof(GenerateJwtService));
             services.AddTransient(typeof(IConfirmationCodeSetting), typeof(ConfirmationCodeSetting));
