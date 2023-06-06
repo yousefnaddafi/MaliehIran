@@ -7,7 +7,7 @@ namespace MaliehIran.Services.ReportServices
 {
     public interface IReportService
     {
-        Task<long> Create(Report model, IFormFile file);
+        Task<long> Create(Report model,bool? sendSMS, IFormFile file);
         Task<Report> Update(Report model);
         Task<Report> Get(long id);
         Task<object> GetAll(int pageNumber, int count, long? shopId, long? userId, ReportType? type, string? searchCommand);

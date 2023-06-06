@@ -1,5 +1,6 @@
 ﻿using IPE.SmsIrClient.Models.Results;
 using MaliehIran.Services.SMSServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -27,9 +28,10 @@ namespace MaliehIran.Controllers
         }
 
         [HttpPost]
-        public async Task SendReport(string userName, string mobileNumber)
+        [Authorize(Roles = "Admin")]
+        public async Task SendReport(long userId)
         {
-            await _sMSService.SendReport(userName, mobileNumber);
+            await _sMSService.SendReport(userId);
         }
     }
 }

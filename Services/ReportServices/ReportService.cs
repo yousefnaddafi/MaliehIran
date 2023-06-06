@@ -2,6 +2,7 @@
 using MaliehIran.Models;
 using MaliehIran.Models.Enums;
 using MaliehIran.Models.Urls;
+using MaliehIran.Services.SMSServices;
 using Microsoft.AspNetCore.Http;
 using Org.BouncyCastle.Asn1.Mozilla;
 using System;
@@ -17,20 +18,26 @@ namespace MaliehIran.Services.ReportServices
         private readonly IProjectEFRepository<Report> _reportRepository;
         private readonly IProjectEFRepository<Media> _mediaRepository;
         private readonly IProjectEFRepository<Shop> _shopRepository;
-        public ReportService(IProjectEFRepository<Report> reportRepository,
+        private readonly ISMSService _smSService;
+        public ReportService(IProjectEFRepository<Report> reportRepository, ISMSService smSService,
             IProjectEFRepository<Media> mediaRepository,IProjectEFRepository<Shop> shopRepository)
         {
             _mediaRepository = mediaRepository;
             _reportRepository = reportRepository;
             _shopRepository = shopRepository;
+            _smSService = smSService;
         }
-        public async Task<long> Create(Report model,IFormFile file)
+        public async Task<long> Create(Report model,bool? sendSMS,IFormFile file)
         {
             model.CreateDate = DateTime.Now;
             var creation = _reportRepository.Insert(model);
             if (creation != null)
             {
                 await UploadFile(file, creation.ReportId);
+                if(sendSMS != null && sendSMS == true)
+                {
+                    await _smSService.SendReport(model.UserId);
+                }
             }
             
             return creation.ReportId;

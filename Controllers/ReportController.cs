@@ -25,7 +25,7 @@ namespace MaliehIran.Controllers
         }
         [HttpPost]
         [Authorize(Roles ="Admin")]
-        public async Task<long> Create(IFormFile file,long shopId, long userId,string description,string title,ReportType type)
+        public async Task<long> Create(IFormFile file,long shopId, long userId,string description,string title,ReportType type,bool? sendSMS,string? link)
         {
             var reportModel = new Report()
             {
@@ -37,8 +37,9 @@ namespace MaliehIran.Controllers
                 Title = title,
                 Type = type,
                 UserId = userId,
+                Link = link
             };
-            return await reportService.Create(reportModel,file);
+            return await reportService.Create(reportModel,sendSMS,file);
         }
         [HttpPost]
         [Authorize(Roles ="Admin")]

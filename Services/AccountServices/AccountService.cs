@@ -627,7 +627,7 @@ namespace MaliehIran.Services.AccountServices
 
                     if (phoneNumber != null && phoneNumber.Length > 5)
                     {
-                        var bulkSendResult = await _sMsService.SendVerificationCode(phoneNumber, confirmCode);
+                        var bulkSendResult = await _sMsService.SendVerificationCode( confirmCode, phoneNumber);
 
                         if (bulkSendResult.Status == 1)
                         {

@@ -7,6 +7,6 @@ namespace MaliehIran.Services.SMSServices
     {
         Task<SmsIrResult<VerifySendResult>> SendVerificationCode(string code, string mobileNumber);
         Task ForgotPassword(string code, string mobileNumber);
-        Task SendReport(string UserName, string mobileNumber);
+        Task SendReport(long userId);
     }
 }

@@ -15,9 +15,11 @@ namespace MaliehIran.Models
         public string? Description { get; set; }
         public ReportType Type { get; set; }
         public DateTime CreateDate { get; set; }
+        public string? Link { get; set; }
         [NotMapped]
         public MediaInfo MediaInfo { get; set; }
         [NotMapped]
         public string ShopName { get; set; }
+  
     }
 }
